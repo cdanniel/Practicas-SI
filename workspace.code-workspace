@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "..\\dev_joyeria_app"
+		},
+		{
+			"path": "..\\Hadoop-Mapreduce-Examples"
+		}
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "automatic",
+		"java.project.sourcePaths": [
+			"tests",
+			"src"
+		]
+	}
+}
