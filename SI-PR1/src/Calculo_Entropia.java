@@ -2,22 +2,29 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.io.BufferedReader; 
+import java.io.FileNotFoundException; 
+import java.io.FileReader; 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 
 public class Calculo_Entropia {
 	
-
+	
 	
 	public static void main(String[] args) throws IOException {
 		
 		ArrayList<Character> cadena = new ArrayList<Character>();
+		ArrayList<Character> cadenaSinRepetidos = new ArrayList<Character>();
 		File archivo = null;
 		FileReader fr = null;
 	    BufferedReader br = null;
 	    int numSaltos = 0;
 
-	    archivo = new File ("C:\\Users\\cdani\\Downloads\\datos_1.txt"); //Torre
+	    archivo = new File ("C:\\Users\\PC\\Downloads\\datos_1.txt"); //Torre
 	    fr = new FileReader (archivo);
 	    br = new BufferedReader(fr);
 
@@ -27,38 +34,46 @@ public class Calculo_Entropia {
 	    	System.out.println(linea);
 	    	for(int i = 0; i < linea.length(); i++) {
 	    		cadena.add(linea.charAt(i));
+	    		if(cadenaSinRepetidos.contains(linea.charAt(i)) == false) {
+	    			cadenaSinRepetidos.add(linea.charAt(i));
+	    		}
+	    		
 	    	}
 	    	numSaltos++;
 	    }
+	    numSaltos = (numSaltos-1) * 2;
 	    System.out.println(cadena.toString());
+	    System.out.println(cadenaSinRepetidos.toString());
 		System.out.println(numSaltos);
 
-		Collections.sort(cadena);
-		System.out.println(cadena.toString());
-		ArrayList<Integer> conteo = contarCaracteres(cadena);
+		ArrayList<Integer> conteo = contarCaracteres(cadena, cadenaSinRepetidos, numSaltos);
 		System.out.println(conteo);
 	    fr.close();
 	}
 
-	public static ArrayList<Integer> contarCaracteres(ArrayList<Character> cadena){
-
+	public static ArrayList<Integer> contarCaracteres(ArrayList<Character> cadena, ArrayList<Character> cadenaSinRepetidos, int numSaltos){
+		boolean c = true;
 		ArrayList<Integer> conteo =  new ArrayList<Integer>();
-		for (int i = 0; i < 100; i++){
-			conteo.add(0);
-		}
-		char caracterActual = 'a';
-		int pos = 0;
-		for (int i = 0; i < cadena.size(); i++){
-			caracterActual = cadena.get(i);
-			if(i+1 < cadena.size() && caracterActual == cadena.get(i+1)){
-				int valor = conteo.get(0).intValue();
-				valor++;
-				Integer nuevoValor = new Integer(valor);
-				conteo.set(pos, nuevoValor);
-			} else if(i+1 < cadena.size() && caracterActual != cadena.get(i+1)){
-				pos++;
+		for(int i = 0; i < cadenaSinRepetidos.size(); i++) {
+			int cont = 0;
+			Character caracterActual = cadenaSinRepetidos.get(i);
+			for(int j = 0; j < cadena.size(); j++) {
+				if(caracterActual == cadena.get(j)) {
+					if(c == true && caracterActual == ' ') {
+						cont += numSaltos;
+						c = false;
+					}
+					cont++;
+				}
 			}
+			conteo.add(cont);
 		}
+		
+//		for(int i = 0; i < cadenaSinRepetidos.size(); i++) {
+//		if(cadenaSinRepetidos.get(i) == ' ') {
+//			conteo.get(i) = conteo.get(i) + numSaltos;
+//		}
+//	}
 		return conteo;
 
 	}
